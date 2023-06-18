@@ -1,3 +1,4 @@
+const { json } = require("express");
 const Book=require("../models/book.js")
 
 let libro=Book;
@@ -6,33 +7,46 @@ libros[0]=new libro("Segio","terror","Sergio Arroyo",2,"sdfsdfds",1,1);
 function getbook(Book,response){
 response.json(libros);
 }
-function postbook(request,response){
-    let nuevo=new libro(request.body.titulo,request.body.tipo,request.body.autor,request.body.price,request.body.photo);
-    if(libros.push(nuevo)){
+function postbook(Book,response){
+    
+    if(libros.push(Book.body)){
         response.send(true);
     }else{
         response.send(false)
     };
+    
    
 }
 function putbook(request,response){
+    
     let comprobar=request.body.id_book;
     for(a=0;a<libros.length;a++){
         if(libros[a].id_book==comprobar){
-            let nuevo=new libro(request.body.titulo,request.body.tipo,request.body.autor,request.body.price,request.body.photo);
+            let nuevo=new Book(request.body.title,request.body.type,request.body.author,request.body.price,request.body.photo,request.body.id_book,request.body.id_user);
             libros[a]=nuevo;
-            response.send(true);
+            
+            
         }
     }
+    response.send({error:false,message:"String modificado"});
 }
 function delbook(request,response){
     let comprobar=request.body.id_book;
+    console.log(comprobar);
     for(a=0;a<libros.length;a++){
+        console.log(a);
+        console.log(libros.length);
+        console.log(libros[a].id_book);
         if(libros[a].id_book==comprobar){
-            libros.splice(a);
-            response.send(true);
+            console.log("Entra");
+            libros.splice(a,1);
+        
+            
+            
         }
+        
     }
+    response.send(true);
 
 }
 module.exports={getbook,postbook,putbook,delbook};
